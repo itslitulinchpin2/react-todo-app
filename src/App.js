@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import "./App.css"
 export default class App extends Component {
-
+//toDo의 아이디어 핵심은 value 관리라고 생각한다.
+//getStyle함수, 동적으로 CSS바꾸는 코드 확인하기.
 
   state = {
     todoData : [
