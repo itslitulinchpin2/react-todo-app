@@ -1,0 +1,57 @@
+import React, { useState } from 'react'
+
+export default function List({todoData,setTodoData}) {
+
+    const btnStyle={
+        color:"#fff",
+        border:"none",
+        padding:"5px 9px",
+        borderRadius:"50%",
+        cursor:"pointer",
+        float:"right"
+      }
+
+      const handleCompleteChange = (id) => {
+        let newTodoData = todoData.map(data=>{
+          if(data.id===id){
+            data.completed=!data.completed
+          }
+          return data;
+        })
+        
+        setTodoData(newTodoData);
+        }
+
+        const getStyle = (completed) => {
+            return{
+              padding:"10px",
+              borderBottomL :"1px #ccc dotted",
+              textDecoration: completed ? "line-through" : "none"
+            }
+          }
+        
+          const handleClick=(id)=>{
+            let newTodoData = todoData.filter(data => data.id !== id)
+            //클릭한 아이디가 아닌 아이디들만 할 일 목록에 남는다.
+            console.log('newTodoData', newTodoData);
+            
+            setTodoData(newTodoData);
+          }
+
+
+  return (
+    <div>
+        {todoData.map(data => (
+              <div style={getStyle(data.completed)} key={data.id}>
+                <input type="checkbox" defaultChecked={false}
+                onChange={()=>handleCompleteChange(data.id)}/>
+                  {data.title}
+                <button style={btnStyle} onClick = {()=>handleClick(data.id)}>x</button>
+              </div>
+            ))
+            }
+
+      
+    </div>
+  )
+}
