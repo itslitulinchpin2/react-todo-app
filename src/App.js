@@ -1,27 +1,16 @@
-import React, {Component} from "react";
+import React, {useState} from "react";
 import "./App.css"
-export default class App extends Component {
+export default function App() {
 //toDo의 아이디어 핵심은 value 관리라고 생각한다.
 //getStyle함수, 동적으로 CSS바꾸는 코드 확인하기.
+//무명함수 사용법, ()=> 여부 확인하기
+  
+const [todoData, setTodoData] = useState([]);
+const [value,setValue] = useState("");
 
-  state = {
-    todoData : [
-      // {
-      //   id: "1",
-      //   title:"공부하기",
-      //   completed:false
-      // },
-      // {
-      //   id: "2",
-      //   title:"청소하기",
-      //   completed:false
-      // }
-    ],
-    value:""
 
-  }
 
-  btnStyle={
+  const btnStyle={
     color:"#fff",
     border:"none",
     padding:"5px 9px",
@@ -30,7 +19,7 @@ export default class App extends Component {
     float:"right"
   }
 
-  getStyle = (completed) => {
+  const getStyle = (completed) => {
     return{
       padding:"10px",
       borderBottomL :"1px #ccc dotted",
@@ -38,45 +27,48 @@ export default class App extends Component {
     }
   }
 
-  handleClick=(id)=>{
-    let newTodoData = this.state.todoData.filter(data => data.id !== id)
+  const handleClick=(id)=>{
+    let newTodoData = todoData.filter(data => data.id !== id)
     //클릭한 아이디가 아닌 아이디들만 할 일 목록에 남는다.
     console.log('newTodoData', newTodoData);
-    this.setState({todoData:newTodoData})
-  }
-
-  handleChange=(event)=>{
     
-    this.setState({value:event.target.value})
+    setTodoData(newTodoData);
   }
 
-  handleSubmit=(e)=>{
+  const handleChange=(event)=>{
+    
+    setValue(event.target.value);
+  }
+
+  const handleSubmit=(e)=>{
     e.preventDefault(); //form을 전송해도 page 리로드 되지 않음.
     
     //새로운 할 일 데이터 생성
     let newToDo = {
       id:Date.now(), //unique한 값을 위함.
-      title:this.state.value,
+      title:value,
       completed:false
     };
     
     //원래 할 일에 새로운 할 일 추가
-    this.setState({todoData:[...this.state.todoData, newToDo], value:""})
+    setTodoData((prev)=>[...prev,newToDo]) //이전값을 가져오는 방법.
+    setValue("")
 
   }
   
-  handleCompleteChange = (id) => {
-    let newTodoData = this.state.todoData.map(data=>{
+  const handleCompleteChange = (id) => {
+    let newTodoData = todoData.map(data=>{
       if(data.id===id){
         data.completed=!data.completed
       }
       return data;
     })
-    this.setState({todoData:newTodoData});
+    
+    setTodoData(newTodoData);
     }
   
 
-  render(){
+  
     return(
       <div className="container">
         <div className="todoBlock">
@@ -84,24 +76,24 @@ export default class App extends Component {
             <h1>할 일 목록</h1>
           </div>
 
-            {this.state.todoData.map(data => (
-              <div style={this.getStyle(data.completed)} key={data.id}>
+            {todoData.map(data => (
+              <div style={getStyle(data.completed)} key={data.id}>
                 <input type="checkbox" defaultChecked={false}
-                onChange={()=>this.handleCompleteChange(data.id)}/>
+                onChange={()=>handleCompleteChange(data.id)}/>
                   {data.title}
-                <button style={this.btnStyle} onClick = {()=>this.handleClick(data.id)}>x</button>
+                <button style={btnStyle} onClick = {()=>handleClick(data.id)}>x</button>
               </div>
             ))
             }
 
-            <form style={{display:'flex'}} onSubmit={this.handleSubmit}>
+            <form style={{display:'flex'}} onSubmit={handleSubmit}>
               <input 
                 type="text" 
                 name="value" 
                 style={{flex: '10', padding: '5px'}}
                 placeholder="할 일을 입력하세요."
-                value={this.state.value}
-                onChange={this.handleChange}
+                value={value}
+                onChange={handleChange}
               />
               <input 
                 type="submit"
@@ -114,7 +106,7 @@ export default class App extends Component {
         </div>
       </div>
     )
-  }
+  
 }
 //클래스 컴포넌트에서는 render() 안에서 UI관련된 코드를 작성한다.
 //jsx에서는 css를 위한 명칭으로 class대신 className을 사용한다.
