@@ -8,8 +8,8 @@ export default function App() {
 //무명함수 사용법, ()=> 여부 확인하기
 
 console.log('App is rendering')
-
-const [todoData, setTodoData] = useState([]);
+const initialTodoData=localStorage.getItem("todoData") ? JSON.parse(localStorage.getItem("todoData")) : []
+const [todoData, setTodoData] = useState(initialTodoData);
 const [value,setValue] = useState("");
 
 const handleClick=useCallback((id)=>{
@@ -18,10 +18,12 @@ const handleClick=useCallback((id)=>{
   console.log('newTodoData', newTodoData);
   
   setTodoData(newTodoData);
+  localStorage.setItem('todoData', JSON.stringify(newTodoData));
 }, [todoData])
   
   const handleRemoveClick = ()=>{
     setTodoData([]);
+    localStorage.setItem('todoData', JSON.stringify([]));
   }
       const handleSubmit=(e)=>{
         e.preventDefault(); //form을 전송해도 page 리로드 되지 않음.
@@ -35,6 +37,7 @@ const handleClick=useCallback((id)=>{
         
         //원래 할 일에 새로운 할 일 추가
         setTodoData((prev)=>[...prev,newToDo]) //이전값을 가져오는 방법.
+        localStorage.setItem('todoData', JSON.stringify([...todoData,newToDo]));
         setValue("")
     
       }
