@@ -37,7 +37,11 @@
   }
 } */
 
-.container{
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* .container{
   margin:auto;
   max-width: 600px;
 }
@@ -48,4 +52,4 @@
   background: #fff;
   border-radius: 10px;
   box-shadow: -9px 17px 13px rgb(0 0 0 / 16%) ;
-}
+} */
